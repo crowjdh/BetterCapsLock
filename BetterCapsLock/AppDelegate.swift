@@ -16,5 +16,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
         capsLockManager.registerEventListener()
+        
+        ShortcutManager.initialize()
     }
 }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5705B6D726634D8800A25D54 /* ShortcutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5705B6D626634D8800A25D54 /* ShortcutManager.swift */; };
 		57F0DD4625E8E8DB005E95DE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F0DD4525E8E8DB005E95DE /* AppDelegate.swift */; };
 		57F0DD4A25E8E8DB005E95DE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57F0DD4925E8E8DB005E95DE /* Assets.xcassets */; };
 		57F0DD5725E8E911005E95DE /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F0DD5625E8E911005E95DE /* main.swift */; };
@@ -15,6 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5705B6D626634D8800A25D54 /* ShortcutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutManager.swift; sourceTree = "<group>"; };
 		57F0DD4225E8E8DB005E95DE /* BetterCapsLock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BetterCapsLock.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		57F0DD4525E8E8DB005E95DE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		57F0DD4925E8E8DB005E95DE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -57,6 +59,7 @@
 			isa = PBXGroup;
 			children = (
 				57F0DD6C25E8EAD1005E95DE /* CapsLockManager.swift */,
+				5705B6D626634D8800A25D54 /* ShortcutManager.swift */,
 				57F0DD6D25E8EAD1005E95DE /* InputSourceManager.swift */,
 				57F0DD5B25E8E95F005E95DE /* BetterCapsLock-Bridging-Header.h */,
 				57F0DD4525E8E8DB005E95DE /* AppDelegate.swift */,
@@ -140,6 +143,7 @@
 				57F0DD5725E8E911005E95DE /* main.swift in Sources */,
 				57F0DD6E25E8EAD1005E95DE /* CapsLockManager.swift in Sources */,
 				57F0DD6F25E8EAD1005E95DE /* InputSourceManager.swift in Sources */,
+				5705B6D726634D8800A25D54 /* ShortcutManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
