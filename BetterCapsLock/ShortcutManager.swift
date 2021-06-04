@@ -7,6 +7,8 @@
 
 import Foundation
 
+let RAW_TARGET_METAS = CGEventFlags.maskCommand.rawValue | CGEventFlags.maskControl.rawValue | CGEventFlags.maskAlternate.rawValue | CGEventFlags.maskShift.rawValue | CGEventFlags.maskSecondaryFn.rawValue
+
 struct KeyBinding {
     let metas: CGEventFlags?
     let keyCode: KeyCodes
@@ -67,14 +69,20 @@ let keyBindings = [
         KeyCodes.n: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskShift.rawValue), keyCode: .down),
     ],
     CGEventFlags.maskAlternate.rawValue: [
-        KeyCodes.f: KeyBinding(metas: .maskControl, keyCode: .right),
-        KeyCodes.b: KeyBinding(metas: .maskControl, keyCode: .left),
-        KeyCodes.p: KeyBinding(metas: nil, keyCode: .cmd_pgup),
-        KeyCodes.n: KeyBinding(metas: nil, keyCode: .cmd_pgdn),
+        KeyCodes.f: KeyBinding(metas: .maskAlternate, keyCode: .right),
+        KeyCodes.b: KeyBinding(metas: .maskAlternate, keyCode: .left),
+        KeyCodes.p: KeyBinding(metas: .maskAlternate, keyCode: .cmd_pgup),
+        KeyCodes.n: KeyBinding(metas: .maskAlternate, keyCode: .cmd_pgdn),
+        KeyCodes.a: KeyBinding(metas: .maskCommand, keyCode: .left),
+        KeyCodes.e: KeyBinding(metas: .maskCommand, keyCode: .right),
     ],
     CGEventFlags.maskAlternate.rawValue | CGEventFlags.maskShift.rawValue: [
         KeyCodes.f: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskAlternate.rawValue | CGEventFlags.maskShift.rawValue), keyCode: .right),
         KeyCodes.b: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskAlternate.rawValue | CGEventFlags.maskShift.rawValue), keyCode: .left),
+        KeyCodes.a: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskCommand.rawValue | CGEventFlags.maskShift.rawValue), keyCode: .left),
+        KeyCodes.e: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskCommand.rawValue | CGEventFlags.maskShift.rawValue), keyCode: .right),
+        KeyCodes.p: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskShift.rawValue), keyCode: .up),
+        KeyCodes.n: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskShift.rawValue), keyCode: .down),
     ],
     CGEventFlags.maskControl.rawValue | CGEventFlags.maskAlternate.rawValue: [
         KeyCodes.p: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskCommand.rawValue), keyCode: .up),
@@ -109,13 +117,12 @@ func keyEventCallback(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent,
     }
     
     let rawKeyCode = event.getIntegerValueField(.keyboardEventKeycode)
-    let rawTargetMetas = CGEventFlags.maskControl.rawValue | CGEventFlags.maskAlternate.rawValue | CGEventFlags.maskShift.rawValue
-    let rawMeta = event.flags.rawValue & (rawTargetMetas)
+    let rawMeta = event.flags.rawValue & (RAW_TARGET_METAS)
     
     if let keyBindingsPerMeta = keyBindings[rawMeta],
        let keyCode = KeyCodes(rawValue: rawKeyCode),
        let keyBinding = keyBindingsPerMeta[keyCode] {
-        let resettedMetaFlags = CGEventFlags(rawValue: event.flags.rawValue & ~rawTargetMetas)
+        let resettedMetaFlags = CGEventFlags(rawValue: event.flags.rawValue & ~RAW_TARGET_METAS)
         event.flags = keyBinding.metas ?? resettedMetaFlags
         event.setIntegerValueField(.keyboardEventKeycode, value: keyBinding.keyCode.rawValue)
     }
