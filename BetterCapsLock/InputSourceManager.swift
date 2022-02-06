@@ -9,7 +9,7 @@ import Cocoa
 import Carbon
 
 class InputSource {
-  let tisInputSource: TISInputSource
+  private let tisInputSource: TISInputSource
 
   var id: String {
     return tisInputSource.id
@@ -50,6 +50,22 @@ extension InputSource {
       InputSource(tisInputSource: $0)
     }
   }
+  
+  static var ABC: InputSource {
+    // This might cause some issue, do watch after.
+    sources[0]
+  }
+  
+  static var current: InputSource {
+    InputSource(tisInputSource: TISInputSource.current)
+  }
+  
+  static var next: InputSource {
+    let currIdx = InputSource.sources.firstIndex(of: InputSource.current)!
+    let nextIdx = (currIdx + 1) % InputSource.sources.count
+    
+    return InputSource.sources[nextIdx]
+  }
 }
 
 extension TISInputSource {
@@ -58,6 +74,8 @@ extension TISInputSource {
       return kTISCategoryKeyboardInputSource as String
     }
   }
+
+  internal static var current: TISInputSource { TISCopyCurrentKeyboardInputSource().takeUnretainedValue() }
 
   private func getProperty(_ key: CFString) -> AnyObject? {
     let cfType = TISGetInputSourceProperty(self, key)
@@ -82,6 +100,10 @@ extension TISInputSource {
 
   var isSelectable: Bool {
     return getProperty(kTISPropertyInputSourceIsSelectCapable) as! Bool
+  }
+    
+  var isSelected: Bool {
+    return getProperty(kTISPropertyInputSourceIsSelected) as! Bool
   }
 
   var sourceLanguages: [String] {

@@ -9,58 +9,9 @@ import Foundation
 import Cocoa
 import Carbon
 
-enum Language: String, CaseIterable {
-    case ABC, Hiragana, Korean="2-Set Korean"
-    
-    var order: Int! {
-        switch self {
-        case .ABC:
-            return 0
-        case .Hiragana:
-            return 1
-        case .Korean:
-            return 2
-        }
-    }
-    
-    static var current: Language! {
-        let curLangName = TISCopyCurrentKeyboardInputSource().takeUnretainedValue().name
-        return Language(rawValue: curLangName)
-    }
-    
-    var next: Language {
-        switch self {
-        case .ABC:
-            return .Korean
-        case .Korean:
-            return .Hiragana
-        case .Hiragana:
-            return .ABC
-        }
-    }
-    
-    func distance(toLanguage target: Language) -> Int {
-        let src = self.order!
-        let dest = target.order!
-        
-        let diff = dest - src
-        switch diff {
-        case let d where d > 0:
-            return d
-        case let d where d < 0:
-            return d + Language.allCases.count
-        case let d where d == 0:
-            return 0
-        default:
-            // Won't ever occur
-            return -1
-        }
-    }
-}
-
 class CapsLockManager {
     var sticky = false
-    var alternativeLanguage: Language? = nil
+    var alternativeInputSource: InputSource? = nil
     
     var capsLockDelay: Int {
         IOHIDServiceClient.getValue(key: kIOHIDKeyboardCapsLockDelayOverrideKey) as! Int
@@ -108,44 +59,21 @@ class CapsLockManager {
     }
     
     func changeLanguage() {
-        guard let currentLanguage = Language.current else {
-             return
-        }
-        var targetLanguage: Language!
-        switch currentLanguage {
+        var targetInputSource: InputSource?
+        switch InputSource.current {
         case .ABC:
-            if self.alternativeLanguage == nil {
-                self.alternativeLanguage = currentLanguage.next
+            if self.alternativeInputSource == nil {
+                self.alternativeInputSource = InputSource.next
             }
-            targetLanguage = self.alternativeLanguage
+            targetInputSource = self.alternativeInputSource
         default:
-            self.alternativeLanguage = currentLanguage
-            targetLanguage = Language.ABC
+            self.alternativeInputSource = InputSource.current
+            targetInputSource = InputSource.ABC
         }
         
-        guard targetLanguage != nil else {
-            return
+        if let targetInputSource = targetInputSource {
+            targetInputSource.select()
         }
-        changeLanguage(distance: currentLanguage.distance(toLanguage: targetLanguage))
-    }
-    
-    func changeLanguage(distance: Int) {
-        let eventSource = CGEventSource(stateID: .hidSystemState)
-
-        let cmdDown = CGEvent(keyboardEventSource: eventSource, virtualKey: 0x38, keyDown: true)
-        let cmdUp = CGEvent(keyboardEventSource: eventSource, virtualKey: 0x38, keyDown: false)
-        let spaceDown = CGEvent(keyboardEventSource: eventSource, virtualKey: 0x31, keyDown: true)
-        let spaceUp = CGEvent(keyboardEventSource: eventSource, virtualKey: 0x31, keyDown: false)
-
-        spaceDown?.flags = .maskCommand
-        spaceUp?.flags = .maskCommand
-
-        cmdDown?.post(tap: .cghidEventTap)
-        for _ in 0..<distance {
-            spaceDown?.post(tap: .cghidEventTap)
-            spaceUp?.post(tap: .cghidEventTap)
-        }
-        cmdUp?.post(tap: .cghidEventTap)
     }
 
     func setCapsLockState(_ state: Bool) {
