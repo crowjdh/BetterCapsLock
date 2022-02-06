@@ -122,6 +122,8 @@ func keyEventCallback(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent,
     
     let rawKeyCode = event.getIntegerValueField(.keyboardEventKeycode)
     let rawMeta = event.flags.rawValue & (RAW_TARGET_METAS)
+    printLog(tag: "Old event flags", log: event.flags.rawValue)
+    printLog(tag: "Old key code", log: rawKeyCode)
     
     if let keyBindingsPerMeta = keyBindings[rawMeta],
        let keyCode = KeyCodes(rawValue: rawKeyCode),
@@ -129,6 +131,33 @@ func keyEventCallback(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent,
         let resettedMetaFlags = CGEventFlags(rawValue: event.flags.rawValue & ~RAW_TARGET_METAS)
         event.flags = keyBinding.metas ?? resettedMetaFlags
         event.setIntegerValueField(.keyboardEventKeycode, value: keyBinding.keyCode.rawValue)
+        
+        printLog(tag: "Resetted meta flags", log: resettedMetaFlags.rawValue)
+        printLog(tag: "New event flags", log: event.flags.rawValue)
+        printLog(tag: "New key code", log: event.getIntegerValueField(.keyboardEventKeycode))
     }
     return Unmanaged.passRetained(event)
+}
+
+func printLog<T>(tag: String, log: T) where T: BinaryInteger {
+    printLog(tag: tag, log: "\(toBinaryRepr(log))", rawValue: log)
+}
+
+func printLog<T>(tag: String, log: String, rawValue: T) where T: BinaryInteger {
+    if true {
+        return
+    }
+    print("\(pad(string: tag, toSize: 20, with: " ", prepend: false)): \(pad(string: log, toSize: 32))(\(rawValue))")
+}
+
+func toBinaryRepr<T>(_ value: T) -> String where T: BinaryInteger {
+    return String(value, radix: 2)
+}
+
+func pad(string: String, toSize: Int, with: String = "0", prepend: Bool = true) -> String {
+    var padded = string
+    for _ in 0..<(toSize - string.count) {
+        padded = prepend ? with + padded : padded + with
+    }
+    return padded
 }
