@@ -124,8 +124,6 @@ func keyEventCallback(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent,
     
     let rawKeyCode = event.getIntegerValueField(.keyboardEventKeycode)
     let rawMeta = event.flags.rawValue & (RAW_TARGET_METAS)
-    printLog(tag: "Old event flags", log: event.flags.rawValue)
-    printLog(tag: "Old key code", log: rawKeyCode)
     
     if let keyBindingsPerMeta = keyBindings[rawMeta],
        let keyCode = KeyCodes(rawValue: rawKeyCode),
@@ -133,10 +131,6 @@ func keyEventCallback(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent,
         let resettedMetaFlags = CGEventFlags(rawValue: event.flags.rawValue & ~RAW_TARGET_METAS)
         event.flags = keyBinding.metas ?? resettedMetaFlags
         event.setIntegerValueField(.keyboardEventKeycode, value: keyBinding.keyCode.rawValue)
-        
-        printLog(tag: "Resetted meta flags", log: resettedMetaFlags.rawValue)
-        printLog(tag: "New event flags", log: event.flags.rawValue)
-        printLog(tag: "New key code", log: event.getIntegerValueField(.keyboardEventKeycode))
     }
     return Unmanaged.passRetained(event)
 }
