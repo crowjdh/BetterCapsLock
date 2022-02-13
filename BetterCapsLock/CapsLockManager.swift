@@ -59,21 +59,11 @@ class CapsLockManager {
     }
     
     func changeLanguage() {
-        var targetInputSource: InputSource?
-        switch InputSource.current {
-        case .ABC:
-            if self.alternativeInputSource == nil {
-                self.alternativeInputSource = InputSource.next
-            }
-            targetInputSource = self.alternativeInputSource
-        default:
-            self.alternativeInputSource = InputSource.current
-            targetInputSource = InputSource.ABC
+        guard let selectPreviousShort = Shortcut.selectPreviousInputSource else {
+            return
         }
         
-        if let targetInputSource = targetInputSource {
-            targetInputSource.select()
-        }
+        selectPreviousShort.post()
     }
 
     func setCapsLockState(_ state: Bool) {

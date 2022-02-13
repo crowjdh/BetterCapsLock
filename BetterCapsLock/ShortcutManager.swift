@@ -7,7 +7,8 @@
 
 import Foundation
 
-let RAW_TARGET_METAS = CGEventFlags.maskCommand.rawValue | CGEventFlags.maskControl.rawValue | CGEventFlags.maskAlternate.rawValue | CGEventFlags.maskShift.rawValue | CGEventFlags.maskSecondaryFn.rawValue
+let TARGET_METAS = [CGEventFlags.maskCommand, CGEventFlags.maskControl, CGEventFlags.maskAlternate, CGEventFlags.maskShift, CGEventFlags.maskSecondaryFn]
+let RAW_TARGET_METAS = TARGET_METAS.reduce(0) { $0 | $1.rawValue }
 
 struct KeyBinding {
     let metas: CGEventFlags?
@@ -23,7 +24,8 @@ enum KeyCodes: Int64, CaseIterable {
     case a = 0, s, d, f, h, g, z, x, c, v,
          b = 11, q, w, e, r, y, t,
          num_1, num_2, num_3, num_4, num_6, num_5, sym_equal, num_9, num_7, sym_minus, num_8, num_0,
-         sym_braket_close, o, u, sym_braket_open, i, p, cmd_return, l, j, sym_quote, k, sym_semicolon, sym_backslask, sym_comma, sym_slash, n, m, sym_period, cmd_tab, space, sym_backtick, cmd_backspace, cmd_enter, cmd_escape
+         sym_braket_close, o, u, sym_braket_open, i, p, cmd_return, l, j, sym_quote, k, sym_semicolon, sym_backslask, sym_comma, sym_slash, n, m, sym_period, cmd_tab, space, sym_backtick, cmd_backspace, cmd_enter, cmd_escape,
+         mod_command = 55, mod_shift, mod_alternate = 58, mod_control, mod_fn = 63
     case sym_numpad_period = 65,
          sym_numpad_asterisk = 67,
          sym_numpad_plus = 69,
