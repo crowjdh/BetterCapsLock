@@ -63,7 +63,12 @@ class CapsLockManager {
             return
         }
         
-        selectPreviousShort.post()
+        switch InputSource.current {
+        case .ABC:
+            selectPreviousShort.post()
+        default:
+            InputSource.ABC.select()
+        }
     }
 
     func setCapsLockState(_ state: Bool) {
