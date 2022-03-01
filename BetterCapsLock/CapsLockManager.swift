@@ -77,6 +77,8 @@ class CapsLockManager {
         IOServiceOpen(ioService, mach_task_self_, UInt32(kIOHIDParamConnectType), &ioConnect)
         IOHIDSetModifierLockState(ioConnect, Int32(kIOHIDCapsLockState), state)
         IOServiceClose(ioConnect)
+        
+        AppDelegate.setStatusIcon(enabled: state)
     }
 
     func getCapsLockState() -> Bool {
