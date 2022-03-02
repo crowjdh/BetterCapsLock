@@ -27,6 +27,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     static func initStatusItem() {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         statusItem.highlightMode = false
+        
+        let editMenuItem = NSMenuItem()
+        editMenuItem.title = "Quit"
+        editMenuItem.action = #selector(quit(_:))
+        editMenuItem.target = self
+        
+        let menu = NSMenu()
+        menu.addItem(editMenuItem)
+        
+        statusItem.menu = menu
     }
     
     static func setStatusIcon(enabled: Bool = false) {
@@ -36,5 +46,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         icon?.backgroundColor = .red
         
         statusItem.button?.image = icon
+    }
+    
+    @objc static func quit(_ sender: AnyObject?) {
+        exit(0)
     }
 }
