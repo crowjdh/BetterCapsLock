@@ -25,6 +25,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     static func initStatusItem() {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         statusItem.highlightMode = false
+        statusItem.button?.setButtonType(.pushOnPushOff)
         
         let editMenuItem = NSMenuItem()
         editMenuItem.title = "Quit"
@@ -41,7 +42,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let icon = NSImage(named: NSImage.Name(enabled ? "StatusIconActive" : "StatusIcon"))
         icon?.size = NSSize(width: 18.0, height: 18.0)
         icon?.isTemplate = true
-        icon?.backgroundColor = .red
         
         statusItem.button?.image = icon
     }
