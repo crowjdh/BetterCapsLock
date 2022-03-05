@@ -99,21 +99,7 @@ let keyBindings = [
 class ShortcutManager {
     
     static func initialize() {
-        let eventMask = (1 << CGEventType.keyDown.rawValue) | (1 << CGEventType.keyUp.rawValue)
-        guard let eventTap = CGEvent.tapCreate(tap: .cgSessionEventTap,
-                                               place: .headInsertEventTap,
-                                               options: .defaultTap,
-                                               eventsOfInterest: CGEventMask(eventMask),
-                                               callback: keyEventCallback,
-                                               userInfo: nil) else {
-            print("failed to create event tap")
-            exit(1)
-        }
-
-        let runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0)
-        CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, .commonModes)
-        CGEvent.tapEnable(tap: eventTap, enable: true)
-        CFRunLoopRun()
+        KeyInterceptor.interceptEvents(eventTypes: [.keyDown, .keyUp], callback: keyEventCallback)
     }
 }
 
@@ -128,8 +114,8 @@ func keyEventCallback(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent,
     if let keyBindingsPerMeta = keyBindings[rawMeta],
        let keyCode = KeyCodes(rawValue: rawKeyCode),
        let keyBinding = keyBindingsPerMeta[keyCode] {
-        let resettedMetaFlags = CGEventFlags(rawValue: event.flags.rawValue & ~RAW_TARGET_METAS)
-        event.flags = keyBinding.metas ?? resettedMetaFlags
+        
+        event.flags = keyBinding.metas ?? CGEventFlags.maskNonCoalesced
         event.setIntegerValueField(.keyboardEventKeycode, value: keyBinding.keyCode.rawValue)
     }
     return Unmanaged.passRetained(event)
