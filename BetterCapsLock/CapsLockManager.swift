@@ -10,14 +10,20 @@ import Cocoa
 import Carbon
 
 class CapsLockManager {
+    static let instance = CapsLockManager()
+    
     var sticky = false
     var alternativeInputSource: InputSource? = nil
     
     var capsLockDelay: Int {
         IOHIDServiceClient.getValue(key: kIOHIDKeyboardCapsLockDelayOverrideKey) as! Int
     }
+    
+    private init() {
+        // no-op
+    }
 
-    func requestAccess() -> Bool {
+    static func requestAccess() -> Bool {
         let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String : true]
         let accessEnabled = AXIsProcessTrustedWithOptions(options)
 
@@ -28,8 +34,21 @@ class CapsLockManager {
         return true
     }
     
+    static func initialize() {
+        // TODO: Temporarily using boolean flag. Implement GUI option later.
+        let useCmd = true
+        if useCmd {
+            KeyInterceptor.interceptEvents(eventTypes: [.keyDown, .keyUp, .flagsChanged], callback: handleSecondaryCommand)
+        } else {
+            // Keep handling caps lock with same logic, since:
+            // 1. It also captures all mouse clicks, which might affect performance
+            // 2. CapsLock isn't being consumed by returning nil, still activating actual caps lock feature
+            instance.registerEventListener()
+        }
+    }
+    
     func registerEventListener() {
-        NSEvent.addGlobalMonitorForEvents(matching: [.keyUp, .systemDefined]) { (event) in
+        NSEvent.addGlobalMonitorForEvents(matching: [.keyDown, .systemDefined]) { (event) in
             guard self.handleEvent(event: event) else {
                 return
             }
@@ -92,4 +111,30 @@ class CapsLockManager {
         IOServiceClose(ioConnect)
         return modifierLockState;
     }
+}
+
+func handleSecondaryCommand(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent, refcon: UnsafeMutableRawPointer?) -> Unmanaged<CGEvent>? {
+    let primaryCommandFlag: UInt64 = 1 << 3
+    let secondaryCommandFlag: UInt64 = 1 << 4
+    
+    let isCmdDown = event.flags.rawValue & CGEventFlags.maskCommand.rawValue > 0
+    let isPrimaryCmd = isCmdDown && (event.flags.rawValue & primaryCommandFlag) > 0
+    let isSecondaryCmd = isCmdDown && (event.flags.rawValue & secondaryCommandFlag) > 0
+
+    let shouldConsume = isSecondaryCmd
+    let shouldActivateMappedCommand = isCmdDown && isSecondaryCmd
+
+    if shouldActivateMappedCommand {
+        // FIX: Temporarily disabled due to quirky behavior.
+//        CapsLockManager.instance.changeLanguage()
+    }
+    if isSecondaryCmd {
+        let filteredRawFlags = event.flags.rawValue &
+            (isPrimaryCmd
+                ? ~secondaryCommandFlag
+                : ~(CGEventFlags.maskCommand.rawValue | secondaryCommandFlag))
+        event.flags = CGEventFlags(rawValue: filteredRawFlags)
+    }
+
+    return shouldConsume ? nil : Unmanaged.passRetained(event)
 }

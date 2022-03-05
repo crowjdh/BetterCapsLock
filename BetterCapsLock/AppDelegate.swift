@@ -9,17 +9,15 @@ import Cocoa
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     static var statusItem: NSStatusItem!
-    
-    let capsLockManager = CapsLockManager()
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        if (!capsLockManager.requestAccess()) {
+        if (!CapsLockManager.requestAccess()) {
             exit(1)
         }
         AppDelegate.initStatusItem()
         AppDelegate.setStatusIcon()
         
-        capsLockManager.registerEventListener()
+        CapsLockManager.initialize()
 
         ShortcutManager.initialize()
     }
