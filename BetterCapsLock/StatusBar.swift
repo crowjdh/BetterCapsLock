@@ -29,28 +29,55 @@ class StatusBar {
     }
     
     func initMenu() {
-        let modifierMenuItem = NSMenuItem()
-        modifierMenuItem.title = "Switch mode"
-        let modifierMenu = NSMenu()
-        modifierMenuItem.submenu = modifierMenu
-        
-        let currMode = ModifierMode.getCurrent()
-        for (index, modifierMode) in ModifierMode.allCases.enumerated() {
-            let isCurrentMode = modifierMode == currMode
-            let asdf = NSMenuItem(title: "\(modifierMode.rawValue)(\(isCurrentMode ? "On" : "Off"))", action: #selector(selectModifierMode(_:)), keyEquivalent: "")
-            asdf.target = self
-            asdf.tag = index
-            modifierMenu.addItem(asdf)
-        }
-        
-        let quitMenuItem = NSMenuItem(title: "Quit", action: #selector(quit(_:)), keyEquivalent: "")
-        quitMenuItem.target = self
+        let modifierMenuItem = createModifierMenuItem()
+        let secretMenuItem = createSecretMenuItem()
+        let quitMenuItem = createQuitMenuItem()
         
         let menu = NSMenu()
         menu.addItem(modifierMenuItem)
+        menu.addItem(secretMenuItem)
         menu.addItem(quitMenuItem)
         
         statusItem.menu = menu
+    }
+    
+    func createModifierMenuItem() -> NSMenuItem {
+        let modifierMenuItem = NSMenuItem()
+        modifierMenuItem.title = "Switch mode"
+        modifierMenuItem.submenu = NSMenu()
+        
+        for (index, modifierMode) in ModifierMode.allCases.enumerated() {
+            modifierMenuItem.submenu!.addItem(createModeMenu(index: index, modifierMode: modifierMode))
+        }
+        
+        return modifierMenuItem
+    }
+    
+    func createSecretMenuItem() -> NSMenuItem {
+        let secretMenuItem = NSMenuItem(title: SecretMode.enabled ? "Back to normal" : "You don't want this.", action: #selector(toggleSecretMode(_:)), keyEquivalent: "")
+        secretMenuItem.target = self
+        secretMenuItem.isAlternate = true
+        secretMenuItem.keyEquivalentModifierMask = [.option]
+        
+        return secretMenuItem
+    }
+    
+    func createQuitMenuItem() -> NSMenuItem {
+        let quitMenuItem = NSMenuItem(title: "Quit", action: #selector(quit(_:)), keyEquivalent: "")
+        quitMenuItem.target = self
+        
+        return quitMenuItem
+    }
+    
+    func createModeMenu(index: Int, modifierMode: ModifierMode) -> NSMenuItem {
+        let currMode = ModifierMode.getCurrent()
+        let isCurrentMode = modifierMode == currMode
+        
+        let modeMenuItem = NSMenuItem(title: "\(modifierMode.rawValue)(\(isCurrentMode ? "On" : "Off"))", action: #selector(selectModifierMode(_:)), keyEquivalent: "")
+        modeMenuItem.target = self
+        modeMenuItem.tag = index
+        
+        return modeMenuItem
     }
 
     func setStatusIcon(enabled: Bool = false) {
@@ -59,6 +86,12 @@ class StatusBar {
         icon?.isTemplate = true
         
         statusItem.button?.image = icon
+    }
+    
+    @objc func toggleSecretMode(_ sender: AnyObject?) {
+        SecretMode.toggle()
+        
+        relaunch()
     }
     
     @objc func selectModifierMode(_ sender: NSMenuItem) {
@@ -80,5 +113,18 @@ class StatusBar {
         task.arguments = [path]
         task.launch()
         exit(0)
+    }
+}
+
+class SecretMode {
+    
+    static let KEY_SECRET_MODE_ENABLED = "isSecretModeEnabled"
+    
+    static var enabled: Bool {
+        return UserDefaults.standard.bool(forKey: KEY_SECRET_MODE_ENABLED)
+    }
+    
+    static func toggle() {
+        UserDefaults.standard.setValue(!enabled, forKey: KEY_SECRET_MODE_ENABLED)
     }
 }

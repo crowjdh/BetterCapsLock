@@ -17,7 +17,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         CapsLockManager.initialize()
 
-        if ModifierMode.getCurrent() == .CapsLock {
+        if ModifierMode.getCurrent() == .CapsLock && SecretMode.enabled {
             ShortcutManager.initialize()
         }
     }
