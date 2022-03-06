@@ -18,6 +18,7 @@ class StatusBar {
     
     func initialize() {
         initStatusItem()
+        initMenu()
         setStatusIcon()
     }
 
@@ -25,14 +26,29 @@ class StatusBar {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         statusItem.highlightMode = false
         statusItem.button?.setButtonType(.pushOnPushOff)
+    }
+    
+    func initMenu() {
+        let modifierMenuItem = NSMenuItem()
+        modifierMenuItem.title = "Switch mode"
+        let modifierMenu = NSMenu()
+        modifierMenuItem.submenu = modifierMenu
         
-        let editMenuItem = NSMenuItem()
-        editMenuItem.title = "Quit"
-        editMenuItem.action = #selector(quit(_:))
-        editMenuItem.target = self
+        let currMode = ModifierMode.getCurrent()
+        for (index, modifierMode) in ModifierMode.allCases.enumerated() {
+            let isCurrentMode = modifierMode == currMode
+            let asdf = NSMenuItem(title: "\(modifierMode.rawValue)(\(isCurrentMode ? "On" : "Off"))", action: #selector(selectModifierMode(_:)), keyEquivalent: "")
+            asdf.target = self
+            asdf.tag = index
+            modifierMenu.addItem(asdf)
+        }
+        
+        let quitMenuItem = NSMenuItem(title: "Quit", action: #selector(quit(_:)), keyEquivalent: "")
+        quitMenuItem.target = self
         
         let menu = NSMenu()
-        menu.addItem(editMenuItem)
+        menu.addItem(modifierMenuItem)
+        menu.addItem(quitMenuItem)
         
         statusItem.menu = menu
     }
@@ -43,6 +59,13 @@ class StatusBar {
         icon?.isTemplate = true
         
         statusItem.button?.image = icon
+    }
+    
+    @objc func selectModifierMode(_ sender: NSMenuItem) {
+        let mode = ModifierMode.allCases[sender.tag]
+        ModifierMode.update(mode: mode)
+        
+        initMenu()
     }
 
     @objc func quit(_ sender: AnyObject?) {
