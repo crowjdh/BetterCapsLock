@@ -65,10 +65,20 @@ class StatusBar {
         let mode = ModifierMode.allCases[sender.tag]
         ModifierMode.update(mode: mode)
         
-        initMenu()
+        relaunch()
     }
 
     @objc func quit(_ sender: AnyObject?) {
+        exit(0)
+    }
+    
+    func relaunch() {
+        let url = URL(fileURLWithPath: Bundle.main.resourcePath!)
+        let path = url.deletingLastPathComponent().deletingLastPathComponent().absoluteString
+        let task = Process()
+        task.launchPath = "/usr/bin/open"
+        task.arguments = [path]
+        task.launch()
         exit(0)
     }
 }

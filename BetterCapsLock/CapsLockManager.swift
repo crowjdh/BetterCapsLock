@@ -37,10 +37,10 @@ class CapsLockManager {
     }
     
     static func initialize() {
-        if debugUseCmd {
+        if ModifierMode.getCurrent() == .SecondaryCommand {
             KeyInterceptor.interceptEvents(eventTypes: [.keyDown, .keyUp, .flagsChanged], callback: handleSecondaryCommand)
             instance.registerSecondaryCommandEventListener()
-        } else {
+        } else if ModifierMode.getCurrent() == .CapsLock {
             // Keep handling caps lock with same logic, since:
             // 1. I tried to capture caps lock event with:
             //    CGEventType(rawValue: NSEvent.EventType.systemDefined)
