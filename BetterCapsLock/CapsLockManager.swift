@@ -126,7 +126,7 @@ class CapsLockManager {
         IOHIDSetModifierLockState(ioConnect, Int32(kIOHIDCapsLockState), state)
         IOServiceClose(ioConnect)
         
-        AppDelegate.setStatusIcon(enabled: state)
+        StatusBar.instance.setStatusIcon(enabled: state)
     }
 
     func getCapsLockState() -> Bool {

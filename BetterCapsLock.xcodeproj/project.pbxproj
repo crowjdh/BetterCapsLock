@@ -11,6 +11,7 @@
 		575AFB3927B8BE8700FB1F57 /* CGEventFlags+KeyCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575AFB3827B8BE8700FB1F57 /* CGEventFlags+KeyCodes.swift */; };
 		575AFB3C27B8BEAA00FB1F57 /* Shortcut.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575AFB3B27B8BEAA00FB1F57 /* Shortcut.swift */; };
 		57BB8B1F27D30FEB008E16A0 /* KeyInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BB8B1E27D30FEB008E16A0 /* KeyInterceptor.swift */; };
+		57D17F3D27D46F9E001F05D2 /* StatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D17F3C27D46F9E001F05D2 /* StatusBar.swift */; };
 		57F0DD4625E8E8DB005E95DE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F0DD4525E8E8DB005E95DE /* AppDelegate.swift */; };
 		57F0DD4A25E8E8DB005E95DE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57F0DD4925E8E8DB005E95DE /* Assets.xcassets */; };
 		57F0DD5725E8E911005E95DE /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F0DD5625E8E911005E95DE /* main.swift */; };
@@ -23,6 +24,7 @@
 		575AFB3827B8BE8700FB1F57 /* CGEventFlags+KeyCodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGEventFlags+KeyCodes.swift"; sourceTree = "<group>"; };
 		575AFB3B27B8BEAA00FB1F57 /* Shortcut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shortcut.swift; sourceTree = "<group>"; };
 		57BB8B1E27D30FEB008E16A0 /* KeyInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyInterceptor.swift; sourceTree = "<group>"; };
+		57D17F3C27D46F9E001F05D2 /* StatusBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBar.swift; sourceTree = "<group>"; };
 		57F0DD4225E8E8DB005E95DE /* BetterCapsLock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BetterCapsLock.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		57F0DD4525E8E8DB005E95DE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		57F0DD4925E8E8DB005E95DE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -76,6 +78,7 @@
 				57F0DD5625E8E911005E95DE /* main.swift */,
 				575AFB3827B8BE8700FB1F57 /* CGEventFlags+KeyCodes.swift */,
 				575AFB3B27B8BEAA00FB1F57 /* Shortcut.swift */,
+				57D17F3C27D46F9E001F05D2 /* StatusBar.swift */,
 			);
 			path = BetterCapsLock;
 			sourceTree = "<group>";
@@ -151,6 +154,7 @@
 				57F0DD4625E8E8DB005E95DE /* AppDelegate.swift in Sources */,
 				57F0DD5725E8E911005E95DE /* main.swift in Sources */,
 				57F0DD6E25E8EAD1005E95DE /* CapsLockManager.swift in Sources */,
+				57D17F3D27D46F9E001F05D2 /* StatusBar.swift in Sources */,
 				575AFB3C27B8BEAA00FB1F57 /* Shortcut.swift in Sources */,
 				575AFB3927B8BE8700FB1F57 /* CGEventFlags+KeyCodes.swift in Sources */,
 				57F0DD6F25E8EAD1005E95DE /* InputSourceManager.swift in Sources */,
