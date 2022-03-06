@@ -7,6 +7,10 @@
 
 import Cocoa
 
+// TODO: Implement options view for choosing between two modes
+// Temporary flag for choosing between two modes.
+let debugUseCmd = true
+
 class AppDelegate: NSObject, NSApplicationDelegate {
     static var statusItem: NSStatusItem!
 
@@ -19,7 +23,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         CapsLockManager.initialize()
 
-        ShortcutManager.initialize()
+        if !debugUseCmd || true {
+            ShortcutManager.initialize()
+        }
     }
     
     static func initStatusItem() {
