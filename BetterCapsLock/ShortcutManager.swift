@@ -110,10 +110,10 @@ func keyEventCallback(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent,
     
     // XXX: Debug message
     if type == .keyDown {
-        print("<<<<")
-        print("Original event:")
+        NSLog("<<<<")
+        NSLog("Original event:")
         pringKeyboardEventDetails(event: event)
-        print()
+        NSLog("\n")
     }
     
     let lrudClearMask = CGEventFlags.maskNumericPad.union(CGEventFlags.maskSecondaryFn)
@@ -135,11 +135,11 @@ func keyEventCallback(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent,
     
     // XXX: Debug message
     if type == .keyDown {
-        print("Updated event:")
+        NSLog("Updated event:")
         pringKeyboardEventDetails(event: event)
-        print(">>>>")
-        print()
-        print()
+        NSLog(">>>>")
+        NSLog("\n")
+        NSLog("\n")
     }
     return Unmanaged.passRetained(event)
 }
@@ -167,9 +167,12 @@ func pringKeyboardEventDetails(event: CGEvent) {
     ]
 
     let flagsMessage = "\(modifiers.compactMap({$0 != nil ? $0! : nil}).joined(separator: " + "))(\(otherFalgs.compactMap({$0 != nil ? $0! : nil}).joined(separator: " + ")))"
-    print(KeyCodes.init(rawValue: keyCode) ?? keyCode)
-    print(flagsMessage)
-    print(toSplittedBinaryRepr(event.flags.rawValue))
+    if let keyCode = KeyCodes.init(rawValue: keyCode) {
+        NSLog("\(keyCode)")
+    } else {
+        NSLog("\(flagsMessage)")
+    }
+    NSLog(toSplittedBinaryRepr(event.flags.rawValue))
 }
 
 func printLog<T>(tag: String, log: T) where T: BinaryInteger {
