@@ -34,7 +34,7 @@ enum KeyCodes: Int64, CaseIterable {
          sym_numpad_enter,
          sym_numpad_minus = 78,
          sym_numpad_equal = 81,
-         sym_numpad_0 = 82, sym_numpad_1, sym_numpad_2, sym_numpad_3, sym_numpad_4, sym_numpad_5, sym_numpad_6, sym_numpad_7, sym_numpad_8, sym_numpad_9
+         sym_numpad_0 = 82, sym_numpad_1, sym_numpad_2, sym_numpad_3, sym_numpad_4, sym_numpad_5, sym_numpad_6, sym_numpad_7, sym_numpad_8 = 91, sym_numpad_9
     case F5 = 96, F6, F7, F3, F8, F9,
          F11 = 103,
          F13 = 105,
@@ -61,38 +61,38 @@ let keyBindings = [
         KeyCodes.j: KeyBinding(metas: nil, keyCode: .down),
         KeyCodes.p: KeyBinding(metas: nil, keyCode: .up),
         KeyCodes.n: KeyBinding(metas: nil, keyCode: .down),
-        KeyCodes.q: KeyBinding(metas: .maskAlternate, keyCode: .left),
-        KeyCodes.w: KeyBinding(metas: .maskAlternate, keyCode: .right),
-        KeyCodes.b: KeyBinding(metas: .maskAlternate, keyCode: .left),
-        KeyCodes.f: KeyBinding(metas: .maskAlternate, keyCode: .right),
-        KeyCodes.i: KeyBinding(metas: .maskAlternate, keyCode: .left),
-        KeyCodes.o: KeyBinding(metas: .maskAlternate, keyCode: .right),
-        KeyCodes.a: KeyBinding(metas: .maskCommand, keyCode: .left),
-        KeyCodes.e: KeyBinding(metas: .maskCommand, keyCode: .right),
-        KeyCodes.sym_equal: KeyBinding(metas: .maskCommand, keyCode: .up),
-        KeyCodes.sym_minus: KeyBinding(metas: .maskCommand, keyCode: .down),
+        KeyCodes.q: KeyBinding(metas: .maskLeftAlternate, keyCode: .left),
+        KeyCodes.w: KeyBinding(metas: .maskLeftAlternate, keyCode: .right),
+        KeyCodes.b: KeyBinding(metas: .maskLeftAlternate, keyCode: .left),
+        KeyCodes.f: KeyBinding(metas: .maskLeftAlternate, keyCode: .right),
+        KeyCodes.i: KeyBinding(metas: .maskLeftAlternate, keyCode: .left),
+        KeyCodes.o: KeyBinding(metas: .maskLeftAlternate, keyCode: .right),
+        KeyCodes.a: KeyBinding(metas: .maskLeftCommand, keyCode: .left),
+        KeyCodes.e: KeyBinding(metas: .maskLeftCommand, keyCode: .right),
+        KeyCodes.sym_equal: KeyBinding(metas: .maskLeftCommand, keyCode: .up),
+        KeyCodes.sym_minus: KeyBinding(metas: .maskLeftCommand, keyCode: .down),
     ],
     CGEventFlags.maskAlternate.rawValue | CGEventFlags.maskShift.rawValue: [
-        KeyCodes.h: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskShift.rawValue), keyCode: .left),
-        KeyCodes.l: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskShift.rawValue), keyCode: .right),
-        KeyCodes.k: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskShift.rawValue), keyCode: .up),
-        KeyCodes.j: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskShift.rawValue), keyCode: .down),
-        KeyCodes.p: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskShift.rawValue), keyCode: .up),
-        KeyCodes.n: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskShift.rawValue), keyCode: .down),
-        KeyCodes.q: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskAlternate.rawValue | CGEventFlags.maskShift.rawValue), keyCode: .left),
-        KeyCodes.w: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskAlternate.rawValue | CGEventFlags.maskShift.rawValue), keyCode: .right),
-        KeyCodes.b: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskAlternate.rawValue | CGEventFlags.maskShift.rawValue), keyCode: .left),
-        KeyCodes.f: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskAlternate.rawValue | CGEventFlags.maskShift.rawValue), keyCode: .right),
-        KeyCodes.i: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskAlternate.rawValue | CGEventFlags.maskShift.rawValue), keyCode: .left),
-        KeyCodes.o: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskAlternate.rawValue | CGEventFlags.maskShift.rawValue), keyCode: .right),
-        KeyCodes.a: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskCommand.rawValue | CGEventFlags.maskShift.rawValue), keyCode: .left),
-        KeyCodes.e: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskCommand.rawValue | CGEventFlags.maskShift.rawValue), keyCode: .right),
-        KeyCodes.sym_equal: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskCommand.rawValue | CGEventFlags.maskShift.rawValue), keyCode: .up),
-        KeyCodes.sym_minus: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskCommand.rawValue | CGEventFlags.maskShift.rawValue), keyCode: .down),
+        KeyCodes.h: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskLeftShift.rawValue), keyCode: .left),
+        KeyCodes.l: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskLeftShift.rawValue), keyCode: .right),
+        KeyCodes.k: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskLeftShift.rawValue), keyCode: .up),
+        KeyCodes.j: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskLeftShift.rawValue), keyCode: .down),
+        KeyCodes.p: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskLeftShift.rawValue), keyCode: .up),
+        KeyCodes.n: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskLeftShift.rawValue), keyCode: .down),
+        KeyCodes.q: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskLeftAlternate.rawValue | CGEventFlags.maskLeftShift.rawValue), keyCode: .left),
+        KeyCodes.w: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskLeftAlternate.rawValue | CGEventFlags.maskLeftShift.rawValue), keyCode: .right),
+        KeyCodes.b: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskLeftAlternate.rawValue | CGEventFlags.maskLeftShift.rawValue), keyCode: .left),
+        KeyCodes.f: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskLeftAlternate.rawValue | CGEventFlags.maskLeftShift.rawValue), keyCode: .right),
+        KeyCodes.i: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskLeftAlternate.rawValue | CGEventFlags.maskLeftShift.rawValue), keyCode: .left),
+        KeyCodes.o: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskLeftAlternate.rawValue | CGEventFlags.maskLeftShift.rawValue), keyCode: .right),
+        KeyCodes.a: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskLeftCommand.rawValue | CGEventFlags.maskLeftShift.rawValue), keyCode: .left),
+        KeyCodes.e: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskLeftCommand.rawValue | CGEventFlags.maskLeftShift.rawValue), keyCode: .right),
+        KeyCodes.sym_equal: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskLeftCommand.rawValue | CGEventFlags.maskLeftShift.rawValue), keyCode: .up),
+        KeyCodes.sym_minus: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskLeftCommand.rawValue | CGEventFlags.maskLeftShift.rawValue), keyCode: .down),
     ],
     CGEventFlags.maskSecondaryFn.rawValue: [
-        KeyCodes.cmd_home: KeyBinding(metas: .maskCommand, keyCode: .left),
-        KeyCodes.cmd_end: KeyBinding(metas: .maskCommand, keyCode: .right),
+        KeyCodes.cmd_home: KeyBinding(metas: .maskLeftCommand, keyCode: .left),
+        KeyCodes.cmd_end: KeyBinding(metas: .maskLeftCommand, keyCode: .right),
     ],
 ]
 
@@ -108,17 +108,68 @@ func keyEventCallback(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent,
         return Unmanaged.passRetained(event)
     }
     
-    let rawKeyCode = event.getIntegerValueField(.keyboardEventKeycode)
-    let rawMeta = event.flags.rawValue & (RAW_TARGET_METAS)
+    // XXX: Debug message
+    if type == .keyDown {
+        print("<<<<")
+        print("Original event:")
+        pringKeyboardEventDetails(event: event)
+        print()
+    }
     
+    let lrudClearMask = CGEventFlags.maskNumericPad.union(CGEventFlags.maskSecondaryFn)
+    let lrudClear = Set<KeyCodes>(arrayLiteral: .left, .right, .up, .down, .sym_numpad_clear)
+    
+    let rawKeyCode = event.getIntegerValueField(.keyboardEventKeycode)
+    let rawMeta = event.flags.rawValue & RAW_TARGET_METAS
+
     if let keyBindingsPerMeta = keyBindings[rawMeta],
        let keyCode = KeyCodes(rawValue: rawKeyCode),
        let keyBinding = keyBindingsPerMeta[keyCode] {
-        
-        event.flags = keyBinding.metas ?? CGEventFlags.maskNonCoalesced
+        event.flags = CGEventFlags(rawValue: CGEventFlags.maskNonCoalesced.rawValue | (keyBinding.metas?.rawValue ?? 0))
         event.setIntegerValueField(.keyboardEventKeycode, value: keyBinding.keyCode.rawValue)
+        
+        if lrudClear.contains(keyBinding.keyCode) {
+            event.flags.insert(lrudClearMask)
+        }
+    }
+    
+    // XXX: Debug message
+    if type == .keyDown {
+        print("Updated event:")
+        pringKeyboardEventDetails(event: event)
+        print(">>>>")
+        print()
+        print()
     }
     return Unmanaged.passRetained(event)
+}
+
+func pringKeyboardEventDetails(event: CGEvent) {
+    let keyCode = event.getIntegerValueField(.keyboardEventKeycode)
+    
+    let modifiers: [String?] = [
+        event.flags.contains(.maskLeftShift) ? "⇧_L" : nil,
+        event.flags.contains(.maskRightShift) ? "⇧_R" : nil,
+        event.flags.contains(.maskLeftControl) ? "^_L" : nil,
+        event.flags.contains(.maskRightControl) ? "^_R" : nil,
+        event.flags.contains(.maskLeftAlternate) ? "⌥_L" : nil,
+        event.flags.contains(.maskRightAlternate) ? "⌥_R" : nil,
+        event.flags.contains(.maskLeftCommand) ? "⌘_L" : nil,
+        event.flags.contains(.maskRightCommand) ? "⌘_R" : nil,
+    ]
+
+    let otherFalgs: [String?] = [
+        event.flags.contains(.maskAlphaShift) ? "AlphaShift" : nil,
+        event.flags.contains(.maskHelp) ? "Help" : nil,
+        event.flags.contains(.maskSecondaryFn) ? "SecondaryFn" : nil,
+        event.flags.contains(.maskNumericPad) ? "NumericPad" : nil,
+        event.flags.contains(.maskNonCoalesced) ? "NonCoalesced" : nil,
+    ]
+
+    let flagsMessage = "\(modifiers.compactMap({$0 != nil ? $0! : nil}).joined(separator: " + "))(\(otherFalgs.compactMap({$0 != nil ? $0! : nil}).joined(separator: " + ")))"
+    print(KeyCodes.init(rawValue: keyCode) ?? keyCode)
+    print(flagsMessage)
+    print(toSplittedBinaryRepr(event.flags.rawValue))
 }
 
 func printLog<T>(tag: String, log: T) where T: BinaryInteger {
@@ -132,6 +183,12 @@ func printLog<T>(tag: String, log: String, rawValue: T) where T: BinaryInteger {
     print("\(pad(string: tag, toSize: 20, with: " ", prepend: false)): \(pad(string: log, toSize: 32))(\(rawValue))")
 }
 
+func toSplittedBinaryRepr<T>(_ value: T) -> String where T: BinaryInteger {
+    return String(toBinaryRepr(value).reversed().enumerated().map { (index, elem) -> String in
+        return index > 0 && index % 4 == 0 ? "\(elem) " : "\(elem)"
+    }.reversed().reduce(into: "", { $0 += $1 }))
+}
+
 func toBinaryRepr<T>(_ value: T) -> String where T: BinaryInteger {
     return String(value, radix: 2)
 }
@@ -142,4 +199,31 @@ func pad(string: String, toSize: Int, with: String = "0", prepend: Bool = true) 
         padded = prepend ? with + padded : padded + with
     }
     return padded
+}
+
+extension CGEventFlags {
+    static var maskLeftShift: CGEventFlags {
+      CGEventFlags(rawValue: CGEventFlags.maskShift.rawValue | (1 << 1))
+    }
+    static var maskRightShift: CGEventFlags {
+      CGEventFlags(rawValue: CGEventFlags.maskShift.rawValue | (1 << 2))
+    }
+    static var maskLeftControl: CGEventFlags {
+      CGEventFlags(rawValue: CGEventFlags.maskControl.rawValue | (1 << 0))
+    }
+    static var maskRightControl: CGEventFlags {
+      CGEventFlags(rawValue: CGEventFlags.maskControl.rawValue | (1 << 13))
+    }
+    static var maskLeftAlternate: CGEventFlags {
+      CGEventFlags(rawValue: CGEventFlags.maskAlternate.rawValue | (1 << 5))
+    }
+    static var maskRightAlternate: CGEventFlags {
+      CGEventFlags(rawValue: CGEventFlags.maskAlternate.rawValue | (1 << 6))
+    }
+    static var maskLeftCommand: CGEventFlags {
+      CGEventFlags(rawValue: CGEventFlags.maskCommand.rawValue | (1 << 3))
+    }
+    static var maskRightCommand: CGEventFlags {
+      CGEventFlags(rawValue: CGEventFlags.maskCommand.rawValue | (1 << 4))
+    }
 }

@@ -143,8 +143,8 @@ class CapsLockManager {
 }
 
 func handleSecondaryCommand(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent, refcon: UnsafeMutableRawPointer?) -> Unmanaged<CGEvent>? {
-    let primaryCommandFlag: UInt64 = 1 << 3
-    let secondaryCommandFlag: UInt64 = 1 << 4
+    let primaryCommandFlag: UInt64 = CGEventFlags.maskLeftCommand.rawValue & ~CGEventFlags.maskCommand.rawValue
+    let secondaryCommandFlag: UInt64 = CGEventFlags.maskRightCommand.rawValue & ~CGEventFlags.maskCommand.rawValue
     
     let isCmdOn = event.flags.rawValue & CGEventFlags.maskCommand.rawValue > 0
     let keyCode = event.getIntegerValueField(.keyboardEventKeycode)
