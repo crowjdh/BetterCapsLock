@@ -113,7 +113,6 @@ func keyEventCallback(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent,
         NSLog("<<<<")
         NSLog("Original event:")
         pringKeyboardEventDetails(event: event)
-        NSLog("\n")
     }
     
     let lrudClearMask = CGEventFlags.maskNumericPad.union(CGEventFlags.maskSecondaryFn)
@@ -138,8 +137,6 @@ func keyEventCallback(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent,
         NSLog("Updated event:")
         pringKeyboardEventDetails(event: event)
         NSLog(">>>>")
-        NSLog("\n")
-        NSLog("\n")
     }
     return Unmanaged.passRetained(event)
 }
@@ -166,12 +163,11 @@ func pringKeyboardEventDetails(event: CGEvent) {
         event.flags.contains(.maskNonCoalesced) ? "NonCoalesced" : nil,
     ]
 
-    let flagsMessage = "\(modifiers.compactMap({$0 != nil ? $0! : nil}).joined(separator: " + "))(\(otherFalgs.compactMap({$0 != nil ? $0! : nil}).joined(separator: " + ")))"
     if let keyCode = KeyCodes.init(rawValue: keyCode) {
         NSLog("\(keyCode)")
-    } else {
-        NSLog("\(flagsMessage)")
     }
+    let flagsMessage = "\(modifiers.compactMap({$0 != nil ? $0! : nil}).joined(separator: " + "))(\(otherFalgs.compactMap({$0 != nil ? $0! : nil}).joined(separator: " + ")))"
+    NSLog("\(flagsMessage)")
     NSLog(toSplittedBinaryRepr(event.flags.rawValue))
 }
 
@@ -187,8 +183,18 @@ func printLog<T>(tag: String, log: String, rawValue: T) where T: BinaryInteger {
 }
 
 func toSplittedBinaryRepr<T>(_ value: T) -> String where T: BinaryInteger {
-    return String(toBinaryRepr(value).reversed().enumerated().map { (index, elem) -> String in
-        return index > 0 && index % 4 == 0 ? "\(elem) " : "\(elem)"
+    let batchSize = 4
+    let maxBatchCount = 10
+    
+    let maxBinaryCount = maxBatchCount * batchSize
+    let binRep = toBinaryRepr(value)
+    let paddingSize = maxBinaryCount - binRep.count
+    
+    let padding = String(repeating: "0", count: paddingSize)
+    let paddedBinRep = padding + binRep
+    
+    return String(paddedBinRep.reversed().enumerated().map { (index, elem) -> String in
+        return index > 0 && index % batchSize == 0 ? "\(elem) " : "\(elem)"
     }.reversed().reduce(into: "", { $0 += $1 }))
 }
 
