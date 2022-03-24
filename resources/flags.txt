@@ -1,0 +1,45 @@
+maskShift:                             10 0000 0000 0000 0000
+maskControl:                          100 0000 0000 0000 0000
+maskAlternate:                       1000 0000 0000 0000 0000
+maskCommand:                       1 0000 0000 0000 0000 0000
+maskSecondaryFn:                1000 0000 0000 0000 0000 0000
+
+maskAlphaShift:                         1 0000 0000 0000 0000
+maskNumericPad:                   10 0000 0000 0000 0000 0000
+maskHelp:                        100 0000 0000 0000 0000 0000
+
+
+left shift:                            10 0000 0001 0000 0010
+right shift:                           10 0000 0001 0000 0100
+left control:                         100 0000 0001 0000 0001
+right control:                        100 0010 0001 0000 0000
+left alt:                            1000 0000 0001 0010 0000
+right alt:                           1000 0000 0001 0100 0000
+left command:                      1 0000 0000 0001 0000 1000
+right command:                     1 0000 0000 0001 0001 0000
+
+NX_ALPHASHIFTMASK:                      1 0000 0000 0000 0000
+NX_SHIFTMASK:                          10 0000 0000 0000 0000
+NX_CONTROLMASK:                       100 0000 0000 0000 0000
+NX_ALTERNATEMASK:                    1000 0000 0000 0000 0000
+NX_COMMANDMASK:                    1 0000 0000 0000 0000 0000
+NX_NUMERICPADMASK:                10 0000 0000 0000 0000 0000
+NX_HELPMASK:                     100 0000 0000 0000 0000 0000
+NX_SECONDARYFNMASK:             1000 0000 0000 0000 0000 0000
+NX_ALPHASHIFT_STATELESS_MASK: 1 0000 0000 0000 0000 0000 0000
+
+NX_DEVICELCTLKEYMASK:                                       1
+NX_DEVICELSHIFTKEYMASK:                                    10
+NX_DEVICERSHIFTKEYMASK:                                   100
+NX_DEVICELCMDKEYMASK:                                    1000
+NX_DEVICERCMDKEYMASK:                                  1 0000
+NX_DEVICELALTKEYMASK:                                 10 0000
+NX_DEVICERALTKEYMASK:                                100 0000
+NX_DEVICE_ALPHASHIFT_STATELESS_MASK:                1000 0000
+NX_DEVICERCTLKEYMASK:                       10 0000 0000 0000
+NX_STYLUSPROXIMITYMASK:                             1000 0000
+NX_NONCOALSESCEDMASK:                             1 0000 0000
+
+
+Resources
+- https://opensource.apple.com/source/IOHIDFamily/IOHIDFamily-1035.1.4/IOHIDEventTranslation/
