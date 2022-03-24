@@ -6,7 +6,8 @@ This is for the people who uses caps lock key to change input source.
 
 # Usage
 ## Common
-1. Build & archive & put ```BetterCapsLock.app``` to ```Application``` directory
+1. Build & archive & put ```BetterCapsLock.app``` to ```Application``` directory. Or you can download pre-built application from [Releases](https://github.com/crowjdh/BetterCapsLock/releases).
+   - There're zero dependencies, so I suggest you to build by yourself.
 2. System Preferences > Secyrity & Privacy > Privacy tab
    - Add the application to ```Accessibility```
 
