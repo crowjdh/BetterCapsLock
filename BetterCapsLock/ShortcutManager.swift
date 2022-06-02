@@ -122,11 +122,11 @@ func keyEventCallback(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent,
     }
     
     // XXX: Debug message
-    if type == .keyDown {
-        NSLog("<<<<")
-        NSLog("Original event:")
-        pringKeyboardEventDetails(event: event)
-    }
+//    if type == .keyDown {
+//        NSLog("<<<<")
+//        NSLog("Original event:")
+//        pringKeyboardEventDetails(event: event)
+//    }
     
     let lrudClearMask = CGEventFlags.maskNumericPad.union(CGEventFlags.maskSecondaryFn)
     let lrudClear = Set<KeyCodes>(arrayLiteral: .left, .right, .up, .down, .sym_numpad_clear)
@@ -145,12 +145,14 @@ func keyEventCallback(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent,
         }
     }
     
+    event.flags.remove(CGEventFlags(rawValue: 0x20000000))
+    
     // XXX: Debug message
-    if type == .keyDown {
-        NSLog("Updated event:")
-        pringKeyboardEventDetails(event: event)
-        NSLog(">>>>")
-    }
+//    if type == .keyDown {
+//        NSLog("Updated event:")
+//        pringKeyboardEventDetails(event: event)
+//        NSLog(">>>>")
+//    }
     return Unmanaged.passRetained(event)
 }
 
@@ -176,12 +178,12 @@ func pringKeyboardEventDetails(event: CGEvent) {
         event.flags.contains(.maskNonCoalesced) ? "NonCoalesced" : nil,
     ]
 
-    if let keyCode = KeyCodes.init(rawValue: keyCode) {
-        NSLog("\(keyCode)")
-    }
-    let flagsMessage = "\(modifiers.compactMap({$0 != nil ? $0! : nil}).joined(separator: " + "))(\(otherFalgs.compactMap({$0 != nil ? $0! : nil}).joined(separator: " + ")))"
-    NSLog("\(flagsMessage)")
-    NSLog(toSplittedBinaryRepr(event.flags.rawValue))
+//    if let keyCode = KeyCodes.init(rawValue: keyCode) {
+//        NSLog("\(keyCode)")
+//    }
+//    let flagsMessage = "\(modifiers.compactMap({$0 != nil ? $0! : nil}).joined(separator: " + "))(\(otherFalgs.compactMap({$0 != nil ? $0! : nil}).joined(separator: " + ")))"
+//    NSLog("\(flagsMessage)")
+//    NSLog(toSplittedBinaryRepr(event.flags.rawValue))
 }
 
 func printLog<T>(tag: String, log: T) where T: BinaryInteger {
