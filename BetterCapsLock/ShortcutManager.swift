@@ -10,9 +10,7 @@ import Foundation
 let TARGET_METAS = [CGEventFlags.maskCommand, CGEventFlags.maskControl, CGEventFlags.maskAlternate, CGEventFlags.maskShift, CGEventFlags.maskSecondaryFn]
 let RAW_TARGET_METAS = TARGET_METAS.reduce(0) { $0 | $1.rawValue }
 
-let KB_VIM_LOCK = KeyBinding(metas: .maskAlternate, keyCode: .special)
-
-var IS_VIM_LOCK = false
+var lockedMetas = UInt64(0)
 
 struct KeyBinding {
     let metas: CGEventFlags?
@@ -20,7 +18,7 @@ struct KeyBinding {
 }
 
 enum KeyCodes: Int64, CaseIterable {
-    case special = -1
+    case lock = -1
     
     case left = 123
     case right = 124
@@ -116,7 +114,7 @@ let keyBindings = [
     CGEventFlags.maskSecondaryFn.rawValue: [
         KeyCodes.cmd_home: KeyBinding(metas: .maskLeftCommand, keyCode: .left),
         KeyCodes.cmd_end: KeyBinding(metas: .maskLeftCommand, keyCode: .right),
-        KeyCodes.F13: KB_VIM_LOCK,
+        KeyCodes.F13: KeyBinding(metas: .maskAlternate, keyCode: .lock),
     ],
 ]
 
@@ -140,13 +138,13 @@ func keyEventCallback(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent,
 //    }
 
     if let keyBinding = eventToKeyBinding(event: event) {
-        if type == .keyDown && keyBinding.keyCode == KB_VIM_LOCK.keyCode && keyBinding.metas == KB_VIM_LOCK.metas {
-            IS_VIM_LOCK = !IS_VIM_LOCK
+        if type == .keyDown && keyBinding.keyCode == .lock, let metas = keyBinding.metas {
+            lockedMetas ^= metas.rawValue
         }
         
         updateEvent(event, withKeyBinding: keyBinding)
-    } else if IS_VIM_LOCK {
-        event.flags.insert(KB_VIM_LOCK.metas!)
+    } else if lockedMetas > 0 {
+        event.flags.insert(CGEventFlags(rawValue: lockedMetas))
         if let keyBinding = eventToKeyBinding(event: event) {
             updateEvent(event, withKeyBinding: keyBinding)
         }
