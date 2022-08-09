@@ -10,12 +10,18 @@ import Foundation
 let TARGET_METAS = [CGEventFlags.maskCommand, CGEventFlags.maskControl, CGEventFlags.maskAlternate, CGEventFlags.maskShift, CGEventFlags.maskSecondaryFn]
 let RAW_TARGET_METAS = TARGET_METAS.reduce(0) { $0 | $1.rawValue }
 
+let KB_VIM_LOCK = KeyBinding(metas: .maskAlternate, keyCode: .special)
+
+var IS_VIM_LOCK = false
+
 struct KeyBinding {
     let metas: CGEventFlags?
     let keyCode: KeyCodes
 }
 
 enum KeyCodes: Int64, CaseIterable {
+    case special = -1
+    
     case left = 123
     case right = 124
     case down = 125
@@ -42,6 +48,10 @@ enum KeyCodes: Int64, CaseIterable {
          F10 = 109,
          F12 = 111,
          F15 = 113,
+         F16 = 106,
+         F17 = 64,
+         F18 = 79,
+         F19 = 80,
          cmd_help = 114,
          cmd_home = 115,
          cmd_pgup = 116,
@@ -92,7 +102,7 @@ let keyBindings = [
         KeyCodes.x: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskLeftShift.rawValue), keyCode: .down),
         KeyCodes.z: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskLeftShift.rawValue), keyCode: .left),
         KeyCodes.c: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskLeftShift.rawValue), keyCode: .right),
-        KeyCodes.d: KeyBinding(metas: nil, keyCode: .cmd_escape),
+        KeyCodes.d: KeyBinding(metas: .maskLeftCommand, keyCode: .o),
         KeyCodes.i: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskLeftAlternate.rawValue | CGEventFlags.maskLeftShift.rawValue), keyCode: .left),
         KeyCodes.o: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskLeftAlternate.rawValue | CGEventFlags.maskLeftShift.rawValue), keyCode: .right),
         KeyCodes.a: KeyBinding(metas: CGEventFlags(rawValue: CGEventFlags.maskLeftCommand.rawValue | CGEventFlags.maskLeftShift.rawValue), keyCode: .left),
@@ -106,6 +116,7 @@ let keyBindings = [
     CGEventFlags.maskSecondaryFn.rawValue: [
         KeyCodes.cmd_home: KeyBinding(metas: .maskLeftCommand, keyCode: .left),
         KeyCodes.cmd_end: KeyBinding(metas: .maskLeftCommand, keyCode: .right),
+        KeyCodes.F13: KB_VIM_LOCK,
     ],
 ]
 
@@ -127,21 +138,17 @@ func keyEventCallback(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent,
 //        NSLog("Original event:")
 //        pringKeyboardEventDetails(event: event)
 //    }
-    
-    let lrudClearMask = CGEventFlags.maskNumericPad.union(CGEventFlags.maskSecondaryFn)
-    let lrudClear = Set<KeyCodes>(arrayLiteral: .left, .right, .up, .down, .sym_numpad_clear)
-    
-    let rawKeyCode = event.getIntegerValueField(.keyboardEventKeycode)
-    let rawMeta = event.flags.rawValue & RAW_TARGET_METAS
 
-    if let keyBindingsPerMeta = keyBindings[rawMeta],
-       let keyCode = KeyCodes(rawValue: rawKeyCode),
-       let keyBinding = keyBindingsPerMeta[keyCode] {
-        event.flags = CGEventFlags(rawValue: CGEventFlags.maskNonCoalesced.rawValue | (keyBinding.metas?.rawValue ?? 0))
-        event.setIntegerValueField(.keyboardEventKeycode, value: keyBinding.keyCode.rawValue)
+    if let keyBinding = eventToKeyBinding(event: event) {
+        if type == .keyDown && keyBinding.keyCode == KB_VIM_LOCK.keyCode && keyBinding.metas == KB_VIM_LOCK.metas {
+            IS_VIM_LOCK = !IS_VIM_LOCK
+        }
         
-        if lrudClear.contains(keyBinding.keyCode) {
-            event.flags.insert(lrudClearMask)
+        updateEvent(event, withKeyBinding: keyBinding)
+    } else if IS_VIM_LOCK {
+        event.flags.insert(KB_VIM_LOCK.metas!)
+        if let keyBinding = eventToKeyBinding(event: event) {
+            updateEvent(event, withKeyBinding: keyBinding)
         }
     }
     
@@ -154,6 +161,31 @@ func keyEventCallback(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent,
 //        NSLog(">>>>")
 //    }
     return Unmanaged.passRetained(event)
+}
+
+func eventToKeyBinding(event: CGEvent) -> KeyBinding? {
+    let rawKeyCode = event.getIntegerValueField(.keyboardEventKeycode)
+    let rawMeta = event.flags.rawValue & RAW_TARGET_METAS
+    
+    guard let keyBindingsPerMeta = keyBindings[rawMeta],
+       let keyCode = KeyCodes(rawValue: rawKeyCode),
+       let keyBinding = keyBindingsPerMeta[keyCode] else {
+        return nil
+    }
+    
+    return keyBinding
+}
+
+func updateEvent(_ event: CGEvent, withKeyBinding keyBinding: KeyBinding) {
+    event.flags = CGEventFlags(rawValue: CGEventFlags.maskNonCoalesced.rawValue | (keyBinding.metas?.rawValue ?? 0))
+    event.setIntegerValueField(.keyboardEventKeycode, value: keyBinding.keyCode.rawValue)
+    
+    let lrudClearMask = CGEventFlags.maskNumericPad.union(CGEventFlags.maskSecondaryFn)
+    let lrudClear = Set<KeyCodes>(arrayLiteral: .left, .right, .up, .down, .sym_numpad_clear)
+    
+    if lrudClear.contains(keyBinding.keyCode) {
+        event.flags.insert(lrudClearMask)
+    }
 }
 
 func pringKeyboardEventDetails(event: CGEvent) {
