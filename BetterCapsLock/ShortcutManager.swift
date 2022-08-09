@@ -114,7 +114,7 @@ let keyBindings = [
     CGEventFlags.maskSecondaryFn.rawValue: [
         KeyCodes.cmd_home: KeyBinding(metas: .maskLeftCommand, keyCode: .left),
         KeyCodes.cmd_end: KeyBinding(metas: .maskLeftCommand, keyCode: .right),
-        KeyCodes.F13: KeyBinding(metas: .maskAlternate, keyCode: .lock),
+        KeyCodes.F13: KeyBinding(metas: .maskLeftAlternate, keyCode: .lock),
     ],
 ]
 
@@ -140,6 +140,7 @@ func keyEventCallback(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent,
     if let keyBinding = eventToKeyBinding(event: event) {
         if type == .keyDown && keyBinding.keyCode == .lock, let metas = keyBinding.metas {
             lockedMetas ^= metas.rawValue
+            StatusBar.instance.updateStatusItem()
         }
         
         updateEvent(event, withKeyBinding: keyBinding)
@@ -256,28 +257,37 @@ func pad(string: String, toSize: Int, with: String = "0", prepend: Bool = true) 
 }
 
 extension CGEventFlags {
+    static var bitsLeftShift = UInt64(1 << 1)
+    static var bitsRightShift = UInt64(1 << 2)
+    static var bitsLeftControl = UInt64(1 << 0)
+    static var bitsRightControl = UInt64(1 << 13)
+    static var bitsLeftAlternate = UInt64(1 << 5)
+    static var bitsRightAlternate = UInt64(1 << 6)
+    static var bitsLeftCommand = UInt64(1 << 3)
+    static var bitsRightCommand = UInt64(1 << 4)
+    
     static var maskLeftShift: CGEventFlags {
-      CGEventFlags(rawValue: CGEventFlags.maskShift.rawValue | (1 << 1))
+      CGEventFlags(rawValue: CGEventFlags.maskShift.rawValue | CGEventFlags.bitsLeftShift)
     }
     static var maskRightShift: CGEventFlags {
-      CGEventFlags(rawValue: CGEventFlags.maskShift.rawValue | (1 << 2))
+      CGEventFlags(rawValue: CGEventFlags.maskShift.rawValue | CGEventFlags.bitsRightShift)
     }
     static var maskLeftControl: CGEventFlags {
-      CGEventFlags(rawValue: CGEventFlags.maskControl.rawValue | (1 << 0))
+      CGEventFlags(rawValue: CGEventFlags.maskControl.rawValue | CGEventFlags.bitsLeftControl)
     }
     static var maskRightControl: CGEventFlags {
-      CGEventFlags(rawValue: CGEventFlags.maskControl.rawValue | (1 << 13))
+      CGEventFlags(rawValue: CGEventFlags.maskControl.rawValue | CGEventFlags.bitsRightControl)
     }
     static var maskLeftAlternate: CGEventFlags {
-      CGEventFlags(rawValue: CGEventFlags.maskAlternate.rawValue | (1 << 5))
+      CGEventFlags(rawValue: CGEventFlags.maskAlternate.rawValue | CGEventFlags.bitsLeftAlternate)
     }
     static var maskRightAlternate: CGEventFlags {
-      CGEventFlags(rawValue: CGEventFlags.maskAlternate.rawValue | (1 << 6))
+      CGEventFlags(rawValue: CGEventFlags.maskAlternate.rawValue | CGEventFlags.bitsRightAlternate)
     }
     static var maskLeftCommand: CGEventFlags {
-      CGEventFlags(rawValue: CGEventFlags.maskCommand.rawValue | (1 << 3))
+      CGEventFlags(rawValue: CGEventFlags.maskCommand.rawValue | CGEventFlags.bitsLeftCommand)
     }
     static var maskRightCommand: CGEventFlags {
-      CGEventFlags(rawValue: CGEventFlags.maskCommand.rawValue | (1 << 4))
+      CGEventFlags(rawValue: CGEventFlags.maskCommand.rawValue | CGEventFlags.bitsRightCommand)
     }
 }

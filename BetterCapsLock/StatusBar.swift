@@ -8,6 +8,7 @@
 import Cocoa
 
 class StatusBar {
+    static let TAG_MENU_ITEM_STATUS = 1
     
     static let instance = StatusBar()
     
@@ -31,11 +32,13 @@ class StatusBar {
     func initMenu() {
         let modifierMenuItem = createModifierMenuItem()
         let secretMenuItem = createSecretMenuItem()
+        let statusMenuItem = createStatusMenuItem()
         let quitMenuItem = createQuitMenuItem()
         
         let menu = NSMenu()
         menu.addItem(modifierMenuItem)
         menu.addItem(secretMenuItem)
+        menu.addItem(statusMenuItem)
         menu.addItem(quitMenuItem)
         
         statusItem.menu = menu
@@ -62,6 +65,14 @@ class StatusBar {
         return secretMenuItem
     }
     
+    func createStatusMenuItem() -> NSMenuItem {
+        let statusMenuItem = NSMenuItem(title: "Locked: \(CGEventFlags(rawValue: lockedMetas).stringRepresentation)", action: nil, keyEquivalent: "")
+        statusMenuItem.target = self
+        statusMenuItem.tag = StatusBar.TAG_MENU_ITEM_STATUS
+        
+        return statusMenuItem
+    }
+    
     func createQuitMenuItem() -> NSMenuItem {
         let quitMenuItem = NSMenuItem(title: "Quit", action: #selector(quit(_:)), keyEquivalent: "")
         quitMenuItem.target = self
@@ -86,6 +97,13 @@ class StatusBar {
         icon?.isTemplate = true
         
         statusItem.button?.image = icon
+    }
+    
+    func updateStatusItem() {
+        guard let menuItem = statusItem.menu?.item(withTag: StatusBar.TAG_MENU_ITEM_STATUS) else {
+            return
+        }
+        menuItem.title = "Locked: \(CGEventFlags(rawValue: lockedMetas).stringRepresentation)"
     }
     
     @objc func toggleSecretMode(_ sender: AnyObject?) {
